@@ -3,6 +3,7 @@
 use std::ffi::CStr;
 use std::fmt;
 use std::os::raw::c_short;
+use libc::{time_t, suseconds_t, pid_t};
 use zerocopy::FromBytes;
 
 /// Record does not contain valid info (formerly known as `UT_UNKNOWN` on Linux)
@@ -44,9 +45,9 @@ pub struct exit_status {
 #[derive(Clone, Copy, Debug, FromBytes)]
 pub struct timeval {
     /// Seconds
-    pub tv_sec: i32,
+    pub tv_sec: time_t,
     /// Microseconds
-    pub tv_usec: i32,
+    pub tv_usec: suseconds_t,
 }
 
 #[repr(C)]
@@ -67,7 +68,7 @@ pub struct utmp {
     /// Exit status of a process marked as `DEAD_PROCESS`; not used by Linux init
     pub ut_exit: exit_status,
     /// Session ID (`getsid(2)`) used for windowing
-    pub ut_session: i32,
+    pub ut_session: pid_t,
     /// Time entry was made
     pub ut_tv: timeval,
     /// Internet address of remote host; IPv4 address uses just `ut_addr_v6[0]`
